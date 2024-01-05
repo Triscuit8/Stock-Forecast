@@ -10,14 +10,14 @@ from prophet import Prophet
 #Utilized Streamlit framework documentation
 #Utilized UBC CPSC 330 lectures for reference, I used to refamiliarize myself with machine learning
 
-st.title("Stock Predictor App")
+st.title("Stock Forecast Application")
 
 # Makes a slider listing out all the stocks that are available to see
 stocks = ("AAPL", "ABNB", "AMZN", "GOOGL", "META", "MSFT", "NFLX",  "TSLA")
 selected_stock = st.selectbox("Select dataset for prediction", stocks)
-# n_years = st.slider("Year of prediction:", 0, 10)
-n_years = st.number_input('Number of years from now')
-n_years = int(n_years)
+# year = st.slider("Year of prediction:", 0, 10)
+year = st.number_input('Number of years from now')
+year = int(year)
 
 tickerData = yf.Ticker(selected_stock)
 
@@ -42,7 +42,7 @@ df_train['ds'] = df_train['ds'].dt.tz_localize(None)
 m.fit(df_train)
 
 #Makes a future prediction using Prophet library, parameter takes in days
-future = m.make_future_dataframe(periods=n_years * 365)
+future = m.make_future_dataframe(periods=year * 365)
 forecast = m.predict(future)
 
 st.subheader("Prediction Data")
