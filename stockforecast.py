@@ -31,6 +31,10 @@ tickerDf.reset_index(inplace=True)
 st.subheader("Raw Data")
 st.write(tickerDf.tail())
 st.line_chart(tickerDf.Close)
+lowest_point = tickerDf['Close'].min()
+st.text("The lowest closing price in the history of this stock was " + str(lowest_point))
+highest_point = tickerDf['Close'].max()
+st.text("The highest closing price in the history of this stock was " + str(highest_point))
 
 #We only need the Date and Close column for the forecasting function
 df_train = tickerDf[['Date', 'Close']]
@@ -51,5 +55,27 @@ st.write(forecast.tail())
 #Plots the forecasted data
 fig = m.plot(forecast)
 st.pyplot(fig)
+
+original_highest = tickerDf["Close"].max()
+new_highest = forecast['yhat'].max()
+
+
+#Details on forecast
+if(original_highest >= new_highest):
+    st.text("The closing price of this stock forecasted in the given year(s) will not grow higher than \n the historical highest closing price")
+else:
+    st.text("The closing price of this stock will grow to the highest in the given year(s), \n to " + str(new_highest))
+    
+
+now_to_future_df = forecast[tickerDf.shape[0]:]
+highest_from_now_to_future = now_to_future_df['yhat'].max()
+
+if(tickerDf.shape[0] == forecast.shape[0]):
+    st.text("There is no forecast taking place right now")
+else:
+    st.text("In the projeted year(s), the highest closing price will be at " + str(highest_from_now_to_future))
+
+
+
 
 
